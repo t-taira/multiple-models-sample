@@ -2,19 +2,20 @@ class SettingsController < ApplicationController
   before_action :set_setting, only: [:show, :edit, :update, :destroy]
 
   # GET /settings
-  # GET /settings.json
   def index
     @settings = Setting.all
+    @store_settings = StoreSetting.all
   end
 
   # GET /settings/1
-  # GET /settings/1.json
   def show
   end
 
   # GET /settings/new
   def new
-    @setting = Setting.new
+    @form = SettingForm.new
+    @form.setting = Setting.new
+    @form.store_setting = StoreSetting.new
   end
 
   # GET /settings/1/edit
@@ -22,53 +23,49 @@ class SettingsController < ApplicationController
   end
 
   # POST /settings
-  # POST /settings.json
   def create
-    @setting = Setting.new(setting_params)
+    @form = SettingForm.new
+    @form.receive(setting_form_params)
 
-    respond_to do |format|
-      if @setting.save
-        format.html { redirect_to @setting, notice: 'Setting was successfully created.' }
-        format.json { render :show, status: :created, location: @setting }
-      else
-        format.html { render :new }
-        format.json { render json: @setting.errors, status: :unprocessable_entity }
-      end
+    if @form.valid?
+      service = @form.build_create_service
+      service.do!
+      redirect_to settings_url, notice: 'Setting was successfully created.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /settings/1
-  # PATCH/PUT /settings/1.json
   def update
-    respond_to do |format|
-      if @setting.update(setting_params)
-        format.html { redirect_to @setting, notice: 'Setting was successfully updated.' }
-        format.json { render :show, status: :ok, location: @setting }
-      else
-        format.html { render :edit }
-        format.json { render json: @setting.errors, status: :unprocessable_entity }
-      end
+    @form.attributes(setting_form_params)
+    if @form.valid?
+      service = @form.build_update_service
+      service.do!
+      redirect_to settings_url, notice: 'Setting was successfully updated.'
+    else
+      render :edit
     end
   end
 
   # DELETE /settings/1
-  # DELETE /settings/1.json
   def destroy
-    @setting.destroy
-    respond_to do |format|
-      format.html { redirect_to settings_url, notice: 'Setting was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    service = @form.build_destroy_service
+    service.do!
+    redirect_to settings_url, notice: 'Setting was successfully destroyed.'
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_setting
-      @setting = Setting.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_setting
+    @form = SettingForm.new()
+    @form.setting = Setting.find(params[:id])
+    @form.store_setting = StoreSetting.first # 固定
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def setting_params
-      params.require(:setting).permit(:name)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def setting_form_params
+    params.require(:setting_form).permit(setting: [:name], store_setting: [:store_name, :name])
+  end
+
 end

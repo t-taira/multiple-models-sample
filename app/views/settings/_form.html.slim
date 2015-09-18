@@ -1,8 +1,14 @@
-= simple_form_for(@setting) do |f|
+= simple_form_for(@form, html: {class: 'form-horizontal'}, url: @form.url, method: @form.method) do |f|
   = f.error_notification
 
-  .form-inputs
-    = f.input :name
+  = f.fields_for @form.setting do |setting_form|
+    .form-inputs
+      = setting_form.input :name
+
+  = f.fields_for @form.store_setting do |store_setting_form|
+    .form-inputs
+      = store_setting_form.input :store_name
+      = store_setting_form.input :name
 
   .form-actions
     = f.button :submit

@@ -19,3 +19,21 @@ table
 br
 
 = link_to 'New Setting', new_setting_path
+
+br
+hr
+
+h1 Listing Store settings
+
+table
+  thead
+    tr
+      th Store Name
+      th Name
+
+  tbody
+    - @store_settings.each do |setting|
+      tr
+        td = setting.store_name
+        td = setting.name
+br
