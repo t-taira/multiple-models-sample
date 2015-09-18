@@ -2,13 +2,30 @@
 <html>
 <head>
   <title>MultipleModelsSample</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+<header class="navbar navbar-inverse" role="navigation">
+  <div class="navbar-inner">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">MultipleModelsSample</a>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="container master-container">
+  <% if notice %>
+    <div class="alert alert-success fade in" data-alert="alert">
+      <a class="close" data-dismiss='alert' href="#">×</a>
 
-<%= yield %>
+      <p><%= notice %></p>
+    </div>
+  <% end %>
 
+  <%= yield %>
+</div>
 </body>
 </html>
