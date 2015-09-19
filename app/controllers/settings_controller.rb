@@ -1,5 +1,5 @@
 class SettingsController < ApplicationController
-  before_action :set_setting, only: [:show, :edit, :update, :destroy]
+  before_action :set_setting_from, only: [:show, :edit, :update, :destroy]
 
   # GET /settings
   def index
@@ -57,7 +57,7 @@ class SettingsController < ApplicationController
 
   private
   # Use callbacks to share common setup or constraints between actions.
-  def set_setting
+  def set_setting_from
     @form = SettingForm.new()
     @form.setting = Setting.find(params[:id])
     @form.store_setting = StoreSetting.first # 固定
