@@ -29,7 +29,7 @@ class SettingsController < ApplicationController
 
     if @form.valid?
       service = @form.build_create_service
-      service.do!
+      service.execute!
       redirect_to settings_url, notice: 'Setting was successfully created.'
     else
       render :new
@@ -41,7 +41,7 @@ class SettingsController < ApplicationController
     @form.attributes(setting_form_params)
     if @form.valid?
       service = @form.build_update_service
-      service.do!
+      service.execute!
       redirect_to settings_url, notice: 'Setting was successfully updated.'
     else
       render :edit
@@ -51,7 +51,7 @@ class SettingsController < ApplicationController
   # DELETE /settings/1
   def destroy
     service = @form.build_destroy_service
-    service.do!
+    service.execute!
     redirect_to settings_url, notice: 'Setting was successfully destroyed.'
   end
 
